@@ -4,9 +4,9 @@ import '../effects/index.dart';
 
 class PageTurnImage extends StatefulWidget {
   const PageTurnImage({
-    Key key,
-    this.amount,
-    this.image,
+    Key? key,
+    required this.amount,
+    required this.image,
     this.backgroundColor = const Color(0xFFFFFFCC),
   }) : super(key: key);
 
@@ -19,11 +19,11 @@ class PageTurnImage extends StatefulWidget {
 }
 
 class _PageTurnImageState extends State<PageTurnImage> {
-  ImageStream _imageStream;
-  ImageInfo _imageInfo;
+  ImageStream? _imageStream;
+  ImageInfo? _imageInfo;
   bool _isListeningToStream = false;
 
-  ImageStreamListener _imageListener;
+  late final ImageStreamListener _imageListener;
 
   @override
   void initState() {
@@ -79,21 +79,21 @@ class _PageTurnImageState extends State<PageTurnImage> {
   void _updateSourceStream(ImageStream newStream) {
     if (_imageStream?.key == newStream?.key) return;
 
-    if (_isListeningToStream) _imageStream.removeListener(_imageListener);
+    if (_isListeningToStream) _imageStream?.removeListener(_imageListener);
 
     _imageStream = newStream;
-    if (_isListeningToStream) _imageStream.addListener(_imageListener);
+    if (_isListeningToStream) _imageStream?.addListener(_imageListener);
   }
 
   void _listenToStream() {
     if (_isListeningToStream) return;
-    _imageStream.addListener(_imageListener);
+    _imageStream?.addListener(_imageListener);
     _isListeningToStream = true;
   }
 
   void _stopListeningToStream() {
     if (!_isListeningToStream) return;
-    _imageStream.removeListener(_imageListener);
+    _imageStream?.removeListener(_imageListener);
     _isListeningToStream = false;
   }
 
@@ -103,7 +103,7 @@ class _PageTurnImageState extends State<PageTurnImage> {
       return CustomPaint(
         painter: PageTurnEffect(
           amount: widget.amount,
-          image: _imageInfo.image,
+          image: _imageInfo!.image,
           backgroundColor: widget.backgroundColor,
         ),
         size: Size.infinite,

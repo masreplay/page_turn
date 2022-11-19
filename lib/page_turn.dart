@@ -6,13 +6,13 @@ import 'src/builders/index.dart';
 
 class PageTurn extends StatefulWidget {
   const PageTurn({
-    Key key,
+    Key? key,
     this.duration = const Duration(milliseconds: 450),
     this.cutoff = 0.6,
     this.backgroundColor = const Color(0xFFFFFFCC),
-    @required this.children,
+    required this.children,
     this.initialIndex = 0,
-    this.lastPage,
+    this.lastPage = const SizedBox.shrink(),
     this.showDragCutoff = false,
   }) : super(key: key);
 
@@ -33,7 +33,7 @@ class PageTurnState extends State<PageTurn> with TickerProviderStateMixin {
   List<Widget> pages = [];
 
   List<AnimationController> _controllers = [];
-  bool _isForward;
+  bool? _isForward;
 
   @override
   void didUpdateWidget(PageTurn oldWidget) {
@@ -97,7 +97,7 @@ class PageTurnState extends State<PageTurn> with TickerProviderStateMixin {
         _isForward = true;
       }
     }
-    if (_isForward || pageNumber == 0) {
+    if (_isForward! || pageNumber == 0) {
       _controllers[pageNumber].value += _ratio;
     } else {
       _controllers[pageNumber - 1].value += _ratio;
@@ -106,7 +106,7 @@ class PageTurnState extends State<PageTurn> with TickerProviderStateMixin {
 
   Future _onDragFinish() async {
     if (_isForward != null) {
-      if (_isForward) {
+      if (_isForward!) {
         if (!_isLastPage &&
             _controllers[pageNumber].value <= (widget.cutoff + 0.15)) {
           await nextPage();
@@ -180,7 +180,7 @@ class PageTurnState extends State<PageTurn> with TickerProviderStateMixin {
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[
-              if (widget?.lastPage != null) ...[
+              if (widget.lastPage != null) ...[
                 widget.lastPage,
               ],
               if (pages != null)
